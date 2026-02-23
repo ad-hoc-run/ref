@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ref.hoc.run</title>
+  <link rel="stylesheet" href="../global.css">
+  <style>
+    .page { max-width: 680px; }
+    p { margin-top: 16px; }
+    h2 { color: var(--fg); margin-top: 32px; margin-bottom: 8px; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; }
+    h2:first-child { margin-top: 0; }
+    code { color: var(--accent); }
+    .dim { color: var(--dim); }
+    ul { margin-top: 8px; padding-left: 20px; }
+    li { margin-top: 6px; }
+    li::marker { color: var(--dim); }
+    .block { margin-top: 16px; border-left: 2px solid var(--border); padding-left: 16px; color: var(--dim); font-size: 13px; line-height: 1.7; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="prompt">$ <a href="https://ad.hoc.run">ad.hoc.run</a> → <span class="path">ref.hoc.run</span></div>
+  </div>
+  <div class="page">
+
+    <h2>What this is</h2>
+    <p>This page defines the rules for building a new ad.hoc.run project. Every project is a single HTML file with a local stylesheet reference and no external dependencies beyond what the tool genuinely requires. Follow this guide exactly and the result will be visually and structurally identical to every other hoc.run tool.</p>
+
+    <h2>File structure</h2>
+    <ul>
+      <li>One directory per project: <code>projectname/index.html</code></li>
+      <li>Stylesheet is always: <code>&lt;link rel="stylesheet" href="../global.css"&gt;</code></li>
+      <li>No build step. No bundler. No framework. Vanilla HTML, CSS, and JS only.</li>
+      <li>External scripts are allowed only when the tool depends on them (e.g. a QR library). Never for UI or layout.</li>
+    </ul>
+
+    <h2>Skeleton — every page starts here</h2>
+    <div class="block">
+      &lt;!DOCTYPE html&gt;<br>
+      &lt;html lang="en"&gt;<br>
+      &lt;head&gt;<br>
+      &nbsp;&nbsp;&lt;meta charset="UTF-8"&gt;<br>
+      &nbsp;&nbsp;&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;<br>
+      &nbsp;&nbsp;&lt;title&gt;X.hoc.run&lt;/title&gt;<br>
+      &nbsp;&nbsp;&lt;link rel="stylesheet" href="../global.css"&gt;<br>
+      &nbsp;&nbsp;&lt;style&gt;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;/* page-specific styles only */<br>
+      &nbsp;&nbsp;&lt;/style&gt;<br>
+      &lt;/head&gt;<br>
+      &lt;body&gt;<br>
+      &nbsp;&nbsp;&lt;div class="topbar"&gt;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="prompt"&gt;$ &lt;a href="https://ad.hoc.run"&gt;ad.hoc.run&lt;/a&gt; → &lt;span class="path"&gt;X.hoc.run&lt;/span&gt;&lt;/div&gt;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- right side: page populates as needed --&gt;<br>
+      &nbsp;&nbsp;&lt;/div&gt;<br>
+      &nbsp;&nbsp;&lt;div class="page"&gt;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- content --&gt;<br>
+      &nbsp;&nbsp;&lt;/div&gt;<br>
+      &lt;/body&gt;<br>
+      &lt;/html&gt;
+    </div>
+
+    <h2>Topbar</h2>
+    <p>The topbar is defined in global.css. It is a flex row: prompt on the left, page-specific controls on the right. To push something to the right, add <code>margin-left: auto</code> to the first right-side element. The topbar is always 42px tall. Never change its height, padding, or border.</p>
+    <ul>
+      <li>Prompt format is always: <code>$ ad.hoc.run → X.hoc.run</code></li>
+      <li><code>ad.hoc.run</code> is a link back to the landing page</li>
+      <li><code>.path</code> gets <code>--accent</code> color via global.css</li>
+      <li>The landing page (<code>ad.hoc.run/</code>) uses <code>$ &lt;span class="path"&gt;ad.hoc.run/&lt;/span&gt;</code> with no back link</li>
+    </ul>
+
+    <h2>Content area</h2>
+    <p>Most pages use <code>&lt;div class="page"&gt;</code>, which provides <code>flex: 1</code>, <code>padding: 24px 32px</code>, and <code>overflow-y: auto</code>. Add <code>max-width</code> locally when the content should be constrained.</p>
+    <p>Full-screen tools (like p2paste) skip <code>.page</code> and instead use a direct flex child with <code>flex: 1</code>. They also add <code>html, body { height: 100%; overflow: hidden; }</code> locally.</p>
+
+    <h2>Colors — only use CSS variables</h2>
+    <ul>
+      <li><code>--bg</code> · <span class="dim">#0d0d0d — page background</span></li>
+      <li><code>--fg</code> · <span class="dim">#e2e2e2 — primary text</span></li>
+      <li><code>--dim</code> · <span class="dim">#666666 — secondary text, labels, hints</span></li>
+      <li><code>--accent</code> · <span class="dim">#00ff88 — interactive elements, highlights, .path</span></li>
+      <li><code>--accent-dark</code> · <span class="dim">#00cc6a — hover state for accent</span></li>
+      <li><code>--border</code> · <span class="dim">#2a2a2a — borders, dividers, separators</span></li>
+      <li><code>--font</code> · <span class="dim">JetBrains Mono stack — never override the typeface</span></li>
+    </ul>
+    <p>Hard-coded color values are only acceptable for one-off states with no semantic meaning (e.g. <code>#ff4444</code> for a destructive error). All structural color must use variables.</p>
+
+    <h2>Typography</h2>
+    <ul>
+      <li>Base size is <code>14px</code> (set in global.css via <code>--font-size</code>). Do not change it on body.</li>
+      <li>Use <code>font-size: 12px</code> for labels and hints, <code>11px</code> for minor metadata.</li>
+      <li>Use <code>font-weight: bold</code> sparingly — links in listings, primary display values.</li>
+      <li>For stacked paragraphs, add <code>p { margin-top: 16px; }</code> locally. The global reset zeroes all margins.</li>
+    </ul>
+
+    <h2>Inputs and buttons</h2>
+    <p>global.css styles all <code>input</code>, <code>textarea</code>, and <code>button</code> elements. Do not restyle them unless the tool has a specific layout need (e.g. removing resize on a textarea). The accent-colored border on focus and the hover fill on buttons are global — do not override them.</p>
+
+    <h2>Philosophy</h2>
+    <ul>
+      <li>One tool, one page, one purpose. If it needs tabs or a nav, it's two tools.</li>
+      <li>No accounts. No tracking. No cookies. No analytics.</li>
+      <li>Pages load fast because they carry nothing extra.</li>
+      <li>If the tool works without JS, let it. If it requires JS, keep it in a single inline script block.</li>
+      <li>Add the project to the landing page listing (<code>index.html</code> at root) with a one-line description.</li>
+    </ul>
+
+  </div>
+</body>
+</html>
